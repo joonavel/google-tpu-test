@@ -25,10 +25,6 @@ def load_tfrecord_dataset(tfrecord_name, batch_size, shuffle=True, buffer_size=1
     if shuffle:
         raw_dataset = raw_dataset.shuffle(buffer_size=buffer_size)
 
-    name_to_features = {'id': tf.io.FixedLenFeature([], tf.string),
-                        'document': tf.io.FixedLenFeature([], tf.string),
-                        'summary': tf.io.FixedLenFeature([], tf.string)}
-
 
     dataset = raw_dataset.map(
         _parse_function,
@@ -44,8 +40,7 @@ def load_tfrecord_dataset(tfrecord_name, batch_size, shuffle=True, buffer_size=1
 
 
 if __name__ == 'main':
-    # 파이썬 파일 실행시 옵션 값을 제대로 받을 수 있는지 확인
-    # 인자값을 받을 수 있는 인스턴스 생성
+    # Check args
     argparser = argparse.ArgumentParser(description='Test')
     argparser.add_argument('--arg1', type=str, required=True)
     argparser.add_argument("--arg2", type=int, required=True)
@@ -54,7 +49,7 @@ if __name__ == 'main':
     test_args = argparser.parse_args()
     print(f'arg1: {test_args.arg1}\n arg2: {test_args.arg2}\n arg3: {test_args.arg3}')
     
-    # TPU를 제대로 인식하는지 확인
+    # check TPU
     tpu = tf.distribute.cluster_resolver.TPUClusterResolver()
 
     tf.config.experimental_connect_to_cluster(tpu)
@@ -64,7 +59,7 @@ if __name__ == 'main':
 
     print(f"Available number of replicas: {strategy.num_replicas_in_sync}")
     
-    # Google Cloud Storage에 접근할 수 있는지 확인
+    # Check Access to Google Cloud Storage
     tfr_path = 'gs://ohsori-tfrecord/tfrecord/literature.tfrecords'
     tf_record = load_tfrecord_dataset(tfr_path, batch_size=strategy.num_replicas_in_sync, shuffle=False)
     tf_record = iter(tf_record)
