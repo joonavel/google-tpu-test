@@ -1,1 +1,1 @@
-# google-tpu-test
+conda install pytorch torchvision torchaudio cpuonly -c pytorch
