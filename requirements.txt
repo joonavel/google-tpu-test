@@ -1,7 +1,8 @@
 transformers==4.20.0
 nltk
-tensorflow==2.10.1
+keras_nlp==0.3.0
+torchinfo
+sentencepiece
 datasets
 huggingface-hub
 rouge-score
-tensorrt
