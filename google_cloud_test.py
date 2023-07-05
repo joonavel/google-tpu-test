@@ -1,6 +1,17 @@
 import argparse
 import tensorflow as tf
 
+
+# check TPU
+tpu = tf.distribute.cluster_resolver.TPUClusterResolver()
+
+tf.config.experimental_connect_to_cluster(tpu)
+tf.tpu.experimental.initialize_tpu_system(tpu)
+
+strategy = tf.distribute.TPUStrategy(tpu)
+
+print(f"Available number of replicas: {strategy.num_replicas_in_sync}")
+
 def _parse_function(example_proto):
 
     name_to_features = {'id': tf.io.FixedLenFeature([], tf.string),
